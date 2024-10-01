@@ -1,0 +1,9 @@
+*.pdf
+*.log
+*.aux
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+.DS_Store
