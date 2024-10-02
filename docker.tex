@@ -43,7 +43,7 @@
 \begin{frame}{What's Docker for? - The Bigger Picture}
 
     Docker simplifies software development and deployment by packaging
-    applications and their dependencies into portable containers, that their
+    applications and their dependencies into portable containers, so their
     behavior are the same across different environment.
 
     \begin{itemize}
@@ -69,6 +69,34 @@
     \note[item]{With docker, you define exactly what the environment is, from
     the base OS image that the container is built from, to unpacking your
     application}
+\end{frame}
+
+\begin{frame}{Docker v. Virtual Machines}
+
+    Docker may sound like virtual machines, but they are very different.
+
+    \begin{itemize}
+        \item VM: Virtualizes an entire computer
+        \item VM: Can run any OS, as it emulates just the computer hardware
+        \item VM: Takes a lot longer to start up, as an entire OS needs to boot
+        \item Docker: powered by Linux Namespaces and OverlayFS
+        \item Docker: can only run on the Linux kernel, and Linux applications
+        \item Docker: can be extremely fast, as we're just running another app
+    \end{itemize}
+
+    \note[item]{In this slide, we will do a brief overview of the internals of
+    docker, and how it differes from traditional virtual machines}
+    \note[item]{Virtual Machines are run on hypervisors, and hypervisors
+    virtualize entire machines, think of a mini computer that is run by the host
+    computer, it emulates the entire CPU, RAM, Storage, and network adatpros,
+    and the machine inside is basically indistinguishable from a machine running
+    on real, non virtualized hardware}
+    \note[item]{This is why you can run things like linux on windws or a macOS
+    hypervisor, and why VMs can take a lot longer to start}
+    \note[item]{Docker, on the other hand, leverages two of Linux's features}
+    \note[item]{Linux Namespaces, and OverlayFS, we will briefly go over them
+    now, but you don't really have to understand them to learn how to use
+    docker, but is important to know it to have an intuition of how it works}
 \end{frame}
 
 \begin{frame}{Linux Namespace via unshare}
@@ -141,16 +169,6 @@
 \begin{frame}[fragile]{Overlayfs}
     \tiny
     \begin{lstlisting}
-mount -t overlay overlay \
--o "lowerdir=$lowerdir1,$lowerdir2,upperdir=$upperdir,workdir=$workdir" "$overlay"
-    \end{lstlisting}
-    \normalsize
-    \note{And this is how you start an overlay mount}
-\end{frame}
-
-\begin{frame}[fragile]{Overlayfs}
-    \tiny
-    \begin{lstlisting}
 $ docker pull postgres
 Using default tag: latest
 latest: Pulling from library/postgres
@@ -196,22 +214,6 @@ CMD ["npm", "run", "start"]
     over at nodejs, this allows us to pin our node version to be at 20}
     \note[item]{Second, we set the working directory to /app, this is the same
     as doing cd in the container}
-\end{frame}
-
-\begin{frame}[fragile]{Building a docker image}
-
-    docker build -t ghcr.io/stevensblueprint/project:ezri-latest .
-
-    \note[item]{In the same directory as the Dockerfile, we can now build the
-    docker image}
-    \note[item]{Docker images are named via labels, a image can have mutlple
-    labels}
-    \note[item]{Each image has a hash, it's basically the image's unique ID}
-    \note[item]{But we can also give it a more human readable name, consisted of
-    a path and a tag}
-    \note[item]{usually a path denotes what the application is, such as the name
-    of the repository}
-    \note[item]{and a tag denotes the version that the application is}
 \end{frame}
 
 \begin{frame}[fragile]{Building a docker image}
